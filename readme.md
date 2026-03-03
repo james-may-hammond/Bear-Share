@@ -27,7 +27,7 @@ some other periphery steps / functions:
 - file size validation
 ```
 
-## System Architecture
+## System   
 ![image](images/arch.png)
 
 ## Storage Architecture
