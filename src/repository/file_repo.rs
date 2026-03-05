@@ -1,5 +1,10 @@
 // The repository layer is responsible only for database interactions, abstracts SQL queries away from the service layer.
-use sqlx::SqlitePool;
+use sqlx::{SqlitePool, Row};
+
+pub struct FileMetadata {
+    pub filename: String,
+    pub storage_path: String,
+}
 
 pub async fn insert_file_metadata(
     pool: &SqlitePool,
@@ -25,4 +30,19 @@ pub async fn insert_file_metadata(
     .await?;
 
     Ok(())
+}
+
+pub async fn get_file_metadata(
+    pool: &SqlitePool,
+    id: &str,
+) -> Result<FileMetadata, sqlx::Error> {
+    let row = sqlx::query(
+        r#"
+        SELECT filename, storage_path
+        FROM files
+        WHERE id = ?
+        "#
+    ).bind(id).fetch_one(pool).await?;
+
+    Ok(FileMetadata { filename: row.get("filename"), storage_path: row.get("storage_path") })
 }

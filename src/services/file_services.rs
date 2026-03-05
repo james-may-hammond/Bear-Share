@@ -17,7 +17,7 @@ pub async fn handle_upload(
         let filename = field.file_name().unwrap_or("file").to_string();
         let file_id = Uuid::new_v4().to_string(); 
         let storage_path = format!("storage/{}", file_id);
-        
+        println!("Saving file to: {}", storage_path);
         let mut file = tokio::fs::File::create(&storage_path).await?; // Create a new file on disk using Tokio's async filesystem API
         let mut file_size = 0;
 				
