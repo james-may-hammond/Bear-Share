@@ -1,3 +1,4 @@
+// The repository layer is responsible only for database interactions, abstracts SQL queries away from the service layer.
 use sqlx::SqlitePool;
 
 pub async fn insert_file_metadata(
