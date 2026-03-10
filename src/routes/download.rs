@@ -17,7 +17,7 @@ pub async fn download(
         Ok(response) => response,
         Err(e) => {
             eprintln!("Download error: {}", e);
-            (StatusCode::NOT_FOUND, "File not found").into_response()
-        }
+            (StatusCode::GONE, "File expired or not found").into_response()
+        }   
     }
 }
