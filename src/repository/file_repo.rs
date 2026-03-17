@@ -5,7 +5,9 @@ use sqlx::{SqlitePool, Row};
 pub struct FileMetadata {
     pub filename: String,
     pub storage_path: String,
+    pub password_hash: Option<String>,
     pub expires_at: Option<i64>,
+    pub max_downloads: Option<i64>,
 }
 
 pub async fn insert_file_metadata(
@@ -15,12 +17,13 @@ pub async fn insert_file_metadata(
     storage_path: &str,
     file_size: i64,
     created_at: i64,
+    password_hash: Option<&str>,
 ) -> Result<(), sqlx::Error> {
 
     sqlx::query(
         r#"
-        INSERT INTO files (id, filename, storage_path, file_size, created_at)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO files (id, filename, storage_path, file_size, created_at, password_hash)
+        VALUES (?, ?, ?, ?, ?, ?)
         "#
     )
     .bind(id)
@@ -28,6 +31,7 @@ pub async fn insert_file_metadata(
     .bind(storage_path)
     .bind(file_size)
     .bind(created_at)
+    .bind(password_hash)
     .execute(pool)
     .await?;
 
@@ -43,7 +47,7 @@ pub async fn get_file_metadata(
     // SQL query to retrieve metadata
     let row = sqlx::query(
         r#"
-        SELECT filename, storage_path, expires_at
+        SELECT filename, storage_path, password_hash, expires_at, max_downloads
         FROM files
         WHERE id = ?
         "#
@@ -55,7 +59,9 @@ pub async fn get_file_metadata(
     Ok(FileMetadata {
         filename: row.get("filename"),
         storage_path: row.get("storage_path"),
+        password_hash: row.get("password_hash"),
         expires_at: row.get("expires_at"),
+        max_downloads: row.get("max_downloads"),
     })
 }
 

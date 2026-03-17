@@ -2,25 +2,33 @@ use axum::{body::Body, http::{Response, StatusCode, header},};  // Types needed 
 use sqlx::SqlitePool;
 use tokio_util::io::ReaderStream; // converts a file into an async stream
 use chrono::Utc;
+use argon2::{Argon2, PasswordVerifier};
+use password_hash::PasswordHash;
 
 use crate::repository::file_repo::{get_file_metadata, increment_download_count};
 
 // download logic
 pub async fn handle_download (
     pool: &SqlitePool,
-    file_id: &str
+    file_id: &str,
+    password: Option<String>
 ) -> Result<Response<Body>, Box<dyn std::error::Error>> {
     let file = get_file_metadata(pool, file_id).await?;
-    
+
+    if let Some(hash) = &file.password_hash {
+        let provided = password.ok_or("Password required")?;
+        let parsed_hash = PasswordHash::new(hash).map_err(|_| "Invalid password hash")?;
+        Argon2::default()
+            .verify_password(provided.as_bytes(), &parsed_hash).map_err(|_| "Incorrect password")?;
+    }
+
     let allowed = increment_download_count(pool, file_id).await?;
 
     if let Some(expiry) = file.expires_at {
         if Utc::now().timestamp() > expiry {
             return Err("File Expired".into());
-            
         }
     }
-    
 
     if !allowed {
         return Err("Download limit reached".into());
