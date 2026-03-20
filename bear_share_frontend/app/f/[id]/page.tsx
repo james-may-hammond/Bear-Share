@@ -20,39 +20,35 @@ export default function DownloadPage({ params }: { params: Promise<{ id: string 
     : backendUrl;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0c] text-neutral-200 flex flex-col items-center justify-center p-4 selection:bg-indigo-500/30 font-sans">
-      {/* Background Orbs for Premium feel */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-indigo-600/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-emerald-600/10 blur-[120px] pointer-events-none" />
-
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col items-center justify-center p-4 selection:bg-blue-500/30 font-sans">
       <main className="w-full max-w-sm relative z-10 flex flex-col gap-6">
         
         {/* Header */}
-        <div className="text-center space-y-2 mb-4">
-          <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-white/5 border border-white/10 shadow-xl backdrop-blur-md mb-2">
-            <DownloadCloud className="w-8 h-8 text-emerald-400" />
+        <div className="text-center space-y-1 mb-2">
+          <div className="inline-flex items-center justify-center p-2 mb-2">
+            <DownloadCloud className="w-8 h-8 text-[#0073ea]" />
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-indigo-400">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
             BearShare
           </h1>
-          <p className="text-neutral-400 text-sm">Download your secure file.</p>
+          <p className="text-slate-500 text-sm">Download your secure file.</p>
         </div>
 
         {/* Dynamic Card */}
-        <div className="bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-xl shadow-2xl transition-all duration-500 ease-out hover:border-white/20 space-y-6">
+        <div className="bg-white border border-slate-200 p-6 rounded-md shadow-sm transition-all duration-300 space-y-5">
           
           <div className="text-center">
-            <h2 className="text-lg font-semibold text-white">Unlock File</h2>
-            <p className="text-xs text-neutral-400 mt-1">If this file is protected, enter the password below.</p>
+            <h2 className="text-lg font-semibold text-slate-900">Unlock File</h2>
+            <p className="text-xs text-slate-500 mt-1">If this file is protected, enter the password below.</p>
           </div>
 
           <div className="space-y-4">
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="password"
                 placeholder="Password (if set)"
-                className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-neutral-600"
+                className="w-full bg-white border border-slate-300 rounded-md py-2.5 pl-10 pr-4 text-sm text-slate-900 focus:outline-none focus:border-[#0073ea] focus:ring-1 focus:ring-[#0073ea] transition-all placeholder:text-slate-400"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -61,14 +57,14 @@ export default function DownloadPage({ params }: { params: Promise<{ id: string 
 
           <a
             href={finalDownloadUrl}
-            className="w-full flex items-center justify-center gap-2 relative overflow-hidden group rounded-xl py-3 font-semibold text-sm transition-all duration-300 bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 relative overflow-hidden rounded-md py-2.5 font-medium text-sm transition-all duration-300 bg-[#0073ea] hover:bg-blue-700 text-white shadow-sm cursor-pointer"
           >
             <DownloadCloud className="w-4 h-4" />
             Download File
           </a>
           
-          <div className="text-center mt-4">
-            <p className="text-xs text-neutral-500">
+          <div className="text-center mt-2">
+            <p className="text-xs text-slate-500">
               Downloads go straight to your browser. You might see an error page if it is expired or max downloaded.
             </p>
           </div>
