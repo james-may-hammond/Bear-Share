@@ -5,7 +5,7 @@ ENV CARGO_BUILD_JOBS=1
 COPY . .
 RUN cargo build --release
 
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 WORKDIR /app/data
 COPY --from=builder /app/target/release/bear_share /usr/local/bin/bear_share
 # Runtime environments
