@@ -18,12 +18,14 @@ pub async fn insert_file_metadata(
     file_size: i64,
     created_at: i64,
     password_hash: Option<&str>,
+    expires_at: Option<i64>,
+    max_downloads: Option<i64>,
 ) -> Result<(), sqlx::Error> {
 
     sqlx::query(
         r#"
-        INSERT INTO files (id, filename, storage_path, file_size, created_at, password_hash)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO files (id, filename, storage_path, file_size, created_at, password_hash, expires_at, max_downloads)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         "#
     )
     .bind(id)
@@ -32,6 +34,8 @@ pub async fn insert_file_metadata(
     .bind(file_size)
     .bind(created_at)
     .bind(password_hash)
+    .bind(expires_at)
+    .bind(max_downloads)
     .execute(pool)
     .await?;
 

@@ -32,7 +32,8 @@ export default function Home() {
     if (maxDownloads) formData.append("max_downloads", maxDownloads);
 
     try {
-      const res = await fetch("http://localhost:8080/upload", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+      const res = await fetch(`${apiUrl}/upload`, {
         method: "POST",
         body: formData,
       });

@@ -11,7 +11,8 @@ export default function DownloadPage({ params }: { params: Promise<{ id: string 
   const { id } = unwrappedParams;
   const [password, setPassword] = useState("");
 
-  const backendUrl = `http://localhost:8080/f/${id}`;
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+  const backendUrl = `${apiUrl}/f/${id}`;
   
   // Construct the final download URL including the password query if provided
   const finalDownloadUrl = password 
