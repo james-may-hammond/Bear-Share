@@ -42,6 +42,27 @@ async fn cors_middleware(req: Request<Body>, next: Next) -> Response {
 async fn main() {
     let db_url = std::env::var("DATABASE_URL").unwrap_or_else(|_| "sqlite:db.sqlite?mode=rwc".to_string());
     let pool = SqlitePool::connect(&db_url).await.expect("Failed to connect to DB");
+    
+    // Ensure the database schema exists (crucial for ephemeral deployments like Render)
+    sqlx::query(
+        r#"
+        CREATE TABLE IF NOT EXISTS files (
+            id TEXT PRIMARY KEY,
+            filename TEXT NOT NULL,
+            storage_path TEXT NOT NULL,
+            password_hash TEXT,
+            expires_at INTEGER,
+            max_downloads INTEGER,
+            download_count INTEGER DEFAULT 0,
+            file_size INTEGER NOT NULL,
+            created_at INTEGER NOT NULL
+        );
+        "#
+    )
+    .execute(&pool)
+    .await
+    .expect("Failed to create database tables");
+
     let cleanup_pool = pool.clone();
     
     // Ensure the storage directory exists
