@@ -31,7 +31,38 @@ User 2: → Open Link → Enter Password                      → Download Safel
 
 ## 🏗️ Architecture
 
-![image](images/arch.png)
+```mermaid
+graph TD
+    Client((Client Browser))
+    
+    subgraph "Vercel Edge Network"
+        UI[Next.js App Router]
+    end
+    
+    subgraph "Render Web Service (Rust)"
+        Router[Axum HTTP Router]
+        Stream[Tokio Async I/O]
+        Worker[Background Cleanup Task]
+        Crypto[Argon2 Password Hashing]
+    end
+    
+    subgraph "Local Storage (Ephemeral)"
+        SQLite[(SQLite Metadata)]
+        Disk[("storage/ (Raw Files)")]
+    end
+
+    Client <-->|Interacts| UI
+    UI <-->|HTTP POST/GET| Router
+    
+    Router -->|Validates/Generates Hashes| Crypto
+    Router -->|Pipes File Chunks| Stream
+    
+    Stream -->|Writes| Disk
+    Router -->|ACID Transaction| SQLite
+    
+    Worker -.->|Scans for Expiry| SQLite
+    Worker -.->|Purges Data| Disk
+```
 
 ### Why SQLite?
 When building distributed systems, developers almost reflexively reach for Postgres or Redis. But for a single-node architecture constraint, SQLite is practically a superpower. 
