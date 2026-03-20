@@ -1,5 +1,7 @@
-FROM rust:1.80-slim-bullseye AS builder
+FROM rust:slim AS builder
 WORKDIR /app
+RUN apt-get update && apt-get install -y pkg-config libssl-dev libc6-dev
+ENV CARGO_BUILD_JOBS=1
 COPY . .
 RUN cargo build --release
 
