@@ -5,6 +5,7 @@ Hey there! Welcome to **BearShare** — a fast, secure, and ephemeral file-shari
 At first glance, it looks like a sleek web app to send files to your friends, but under the hood, this is a **Systems Engineering project**. I built this to dive deep into backend architecture, concurrency control, safe memory management, and transactional consistency in a real-world environment.
 
 ## 🛠️ What's Actually Going On Here?
+- A short note or limitation render's free tier is only persistent for 15 minutes after which our state is expiered meaning files are lost, so bearshare works only upto 15 minutes for now, due to fiduciary reasons
 
 When you upload a file, there's a lot of heavy lifting happening behind the scenes to make sure things are fast, safe, and thread-secure.
 
